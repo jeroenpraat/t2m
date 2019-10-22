@@ -1,6 +1,6 @@
 ❕🗒 Important note: This fork is especially for bots on [NewsBots.eu](https://newsbots.eu) (a Mastodon server for news bots). 
 
-You only need the [t2m folder](https://github.com/jeroenpraat/t2m/tree/master/t2m). If you install t2m as an user with pip or pip3, that folder is installed as ~/.local/lib/python*/site-packages/t2m/. There are two files in this folder and should both overwrite them with the files you can download here: [__init__.py](https://github.com/jeroenpraat/t2m/blob/master/t2m/__init__.py) and [retweet.tmpl](https://github.com/jeroenpraat/t2m/blob/master/t2m/retweet.tmpl).
+You only need the [t2m folder](https://github.com/jeroenpraat/t2m/tree/master/t2m). If you install t2m as an user with pip or pip3, that folder is installed as ~/.local/lib/python*/site-packages/t2m/. There are two files in this folder and should both overwrite them with the files you can download here: [__init__.py](https://github.com/jeroenpraat/t2m/blob/master/t2m/__init__.py) and [retweet.tmpl](https://github.com/jeroenpraat/t2m/blob/master/t2m/retweet.tmpl). The modified files are based on the latest pip/pip3 versions.
 
 ----
 ----
