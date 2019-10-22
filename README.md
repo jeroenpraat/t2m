@@ -10,8 +10,9 @@ or with pip3:
   
     pip3 install t2m
 
+<br /><br />
 You only need the folder [`t2m`](https://github.com/jeroenpraat/t2m/tree/master/t2m). If you installed t2m as an user with pip/pip3, that folder is installed as `~/.local/lib/python*/site-packages/t2m/`. There are two files in this folder and should both overwrite them with the files you can download here: [`__init__.py`](https://github.com/jeroenpraat/t2m/blob/master/t2m/__init__.py) and [`retweet.tmpl`](https://github.com/jeroenpraat/t2m/blob/master/t2m/retweet.tmpl). The modified files are based on the latest pip/pip3 versions.
-
+<br /><br />
 Remember that when you later update t2m using pip/pip3, you have to download en overwrite the two files again. Be careful with this and always use the newest files from here.
 
 <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
