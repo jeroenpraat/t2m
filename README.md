@@ -2,16 +2,16 @@
 
 ❕🗒 Important note: This fork is for bots on [NewsBots.eu](https://newsbots.eu) (a Mastodon server for news bots). You can use it with other projects, but you probably have to modify it a little bit.
 
-You only need the folder [`t2m`](https://github.com/jeroenpraat/t2m/tree/master/t2m). If you install t2m as an user with pip or pip3 (see below), that folder is installed as `~/.local/lib/python*/site-packages/t2m/`. There are two files in this folder and should both overwrite them with the files you can download here: [`__init__.py`](https://github.com/jeroenpraat/t2m/blob/master/t2m/__init__.py) and [`retweet.tmpl`](https://github.com/jeroenpraat/t2m/blob/master/t2m/retweet.tmpl). The modified files are based on the latest pip/pip3 versions.
-
-To install it using pip:
+First install t2m with pip as the user who's going to run the bot:
 
     pip install t2m
     
-or pip3:
+or with pip3:
   
     pip3 install t2m
-    
+
+You only need the folder [`t2m`](https://github.com/jeroenpraat/t2m/tree/master/t2m). If you installed t2m as an user with pip/pip3, that folder is installed as `~/.local/lib/python*/site-packages/t2m/`. There are two files in this folder and should both overwrite them with the files you can download here: [`__init__.py`](https://github.com/jeroenpraat/t2m/blob/master/t2m/__init__.py) and [`retweet.tmpl`](https://github.com/jeroenpraat/t2m/blob/master/t2m/retweet.tmpl). The modified files are based on the latest pip/pip3 versions.
+
 Remember that when you later update t2m using pip/pip3, you have to download en overwrite the two files again. Be careful with this and always use the newest files from here.
 
 <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
