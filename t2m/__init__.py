@@ -125,7 +125,7 @@ def _check_complete_mastodon_handle(mastodon_handle, twitter_handle):
 
 
 def _collect_toots(twitter_client, twitter_handle, done=(), retweets=False,
-                   max_tweets=200, strip_trailing_url=False):
+                   max_tweets=200, strip_trailing_url=True):
     """Return a list of dicts describing toots to be sent.
 
     Given `twitter_handle` and the `done` list of already sent tweet
@@ -156,8 +156,7 @@ def _collect_toots(twitter_client, twitter_handle, done=(), retweets=False,
     for i in reversed(twitter_client.GetUserTimeline(
             screen_name=twitter_handle, count=max_tweets)):
 
-        quoted_status = getattr(i, "quoted_status", None)
-        retweeted_status = i.retweeted_status or quoted_status
+        retweeted_status = i.retweeted_status or i.quoted_status
 
         if retweeted_status:
             if retweets:
@@ -167,9 +166,9 @@ def _collect_toots(twitter_client, twitter_handle, done=(), retweets=False,
                     "id": retweeted_status.id
                 }
 
-                # can only be greater than 500 chars if it's a quoted tweet so checking here
+                # can only be greater than 800 chars if it's a quoted tweet so checking here
                 # delete the text of the quoted tweet from the toot end replace it with a much shorter string
-                if quoted_status and len(text) > 500:
+                if i.quoted_status and len(text) > 800:
                     text = retweet_template % {
                         "text": "Quoted tweet's link below",
                         "user": retweeted_status.user.screen_name,
@@ -177,7 +176,7 @@ def _collect_toots(twitter_client, twitter_handle, done=(), retweets=False,
                     }
                     text = i.full_text + "\n\n" + text
 
-                if quoted_status:
+                if i.quoted_status:
                     text = i.full_text + "\n\n" + text
 
                 urls = retweeted_status.urls
@@ -200,14 +199,23 @@ def _collect_toots(twitter_client, twitter_handle, done=(), retweets=False,
         # remove this t.co crap
         for url in urls:
             text = text.replace(url.url, url.expanded_url)
-
+        
         # strip last t.co URL, which is a reference to the tweet
         # itself (other URLs were expanded above, so there is no risk
         # to remove an important, part of the text, URL)
-        if strip_trailing_url:
-            match = ENDS_WITH_TCO_URL_REGEX.search(text)
-            if match is not None:
-                text = text[:-len(match.group('stripme'))]
+        match = ENDS_WITH_TCO_URL_REGEX.search(text)
+        if match is not None:
+            text = text[:-len(match.group('stripme'))]
+        
+        # let's add a nitter link and hashtags at the end of toots
+        if i.retweeted_status:
+            text = text + "\n\n[:tw: https://tweets.newsbots.eu/" + str(retweeted_status.user.screen_name) + "/status/" + str(retweeted_status.id) + " — #bot]"
+
+        else:
+            text = text + "\n\n[:tw: https://tweets.newsbots.eu/" + str(i.user.screen_name) + "/status/" + str(i.id) + " — #bot]"
+
+        # let's change all twitter.com links to nitter
+        text = re.sub('https://twitter\.com',':tw: https://tweets.newsbots.eu', text)
 
         toot_text = h.unescape(text)
         warning, toot_text = _find_potential_content_warning(toot_text)
@@ -266,7 +274,7 @@ def _get_mastodon_client(mastodon_handle):
 
 def _forward(db, twitter_handle, mastodon_handle, number=None,
              only_mark_as_seen=False, retweets=False, debug=False,
-             wait_seconds=30, strip_trailing_url=False):
+             wait_seconds=30, strip_trailing_url=True):
     """Internal function that does the actual tweet forwarding job.
 
     This function modifies the given `db` parameter.
@@ -337,7 +345,7 @@ def _forward(db, twitter_handle, mastodon_handle, number=None,
 
 def one(twitter_handle, mastodon_handle=None, number=None,
         only_mark_as_seen=False, retweets=False, debug=False,
-        wait_seconds=30, strip_trailing_url=False):
+        wait_seconds=30, strip_trailing_url=True):
     """Forward tweets of *one* twitter account to Mastodon.
 
     If the `mastodon_handle` parameter is not specified, the given
@@ -392,7 +400,7 @@ def one(twitter_handle, mastodon_handle=None, number=None,
 
 
 def all(retweets=False, debug=False, wait_seconds=30,
-        strip_trailing_url=False):
+        strip_trailing_url=True):
     """Forward the tweets of all known twitter accounts to Mastodon.
 
     Only not already forwarded tweets are forwarded. Note that you
